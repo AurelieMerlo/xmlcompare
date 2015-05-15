@@ -4,12 +4,25 @@ import (
 	"testing"
 )
 
-const simpleXML = `<human><firstname>chris</firstname><lastname>james</lastname><age>30</age></human>`
-const comparableXML = `<human><firstname>christopher</firstname><lastname>james</lastname><age>15</age></human>`
-const incomparableXML = `<wildebeest><name>Blue</name></wildebeest>`
+const baseXML = `<human><firstname>chris</firstname><lastname>james</lastname><age>30</age></human>`
+const compatibleXML = `<human><firstname>christopher</firstname><lastname>james</lastname><age>15</age></human>`
+const differentElementNamesXML = `<wildebeest><name>Blue</name></wildebeest>`
+const differentValueTypeXML = `<human><firstname>kristofferson</firstname><lastname>james</lastname><age>old</age></human>`
 
-func TestItKnowsTheSameXMLIsCompatible(t *testing.T) {
-	assertCompatible(t, simpleXML, simpleXML)
+func TestIdenticalXMLIsCompatible(t *testing.T) {
+	assertCompatible(t, baseXML, baseXML)
+}
+
+func TestXMLWithSameElementNamesAndValueTypesIsCompatible(t *testing.T) {
+	assertCompatible(t, baseXML, compatibleXML)
+}
+
+func TestXMLWithDifferentElementNamesIsIncompatible(t *testing.T) {
+	assertIncompatible(t, baseXML, differentElementNamesXML)
+}
+
+func TestXMLWithDifferentValueTypesIsIncompatible(t *testing.T) {
+	assertIncompatible(t, baseXML, differentValueTypeXML)
 }
 
 func assertCompatible(t *testing.T, a, b string) {
