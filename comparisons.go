@@ -26,32 +26,55 @@ func IsCompatible(a, b string) (compatible bool, err error) {
 }
 
 func isStructurallyTheSame(a, b map[string]interface{}) (compatible bool, err error) {
+	if reflect.DeepEqual(a, b) {
+		compatible = true
+		return
+	}
 	for keyInA, v := range a {
+		fmt.Println("keyInA: ", keyInA)
+		fmt.Println("b[keyInA]: ", b[keyInA])
 
 		if b[keyInA] == nil {
+			fmt.Println("Element '%s' exists in 1st XML but not in 2nd")
 			return
 		}
+		fmt.Println("v: ", v)
 
 		switch v.(type) {
 		case string:
+			fmt.Println("v is string")
 			if _, isString := b[keyInA].(string); !isString {
 				return
 			}
 		case bool:
+			fmt.Println("v is bool")
 			if _, isBool := b[keyInA].(bool); !isBool {
 				return
 			}
 		case float64:
+			fmt.Println("v is float64")
 			if _, isFloat := b[keyInA].(float64); !isFloat {
 				return
 			}
 
 		case interface{}:
-			aArr, _ := a[keyInA].([]interface{})
+			fmt.Println("v is interface")
+			aArr, aIsArray := a[keyInA].([]interface{})
+			fmt.Println("aArr: ", aArr)
+			fmt.Println("aIsArray: ", aIsArray)
 
 			bArr, bIsArray := b[keyInA].([]interface{})
+			fmt.Println("bArr: ", bArr)
+			fmt.Println("bIsArray: ", bIsArray)
 
-			if !bIsArray {
+			if !bIsArray &&
+				aIsArray {
+				return
+			}
+
+			if !bIsArray &&
+				!aIsArray {
+				fmt.Println("Neither a or b is array. I should do something else but I don't know what!")
 				return
 			}
 
