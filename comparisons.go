@@ -9,7 +9,6 @@ import (
 
 // IsCompatible checks that two XML strings are structurally the same so that they are compatible. The first string should be your "correct" XML, if there are extra elements in B then they will still be seen as compatible.
 func IsCompatible(a, b string) (compatible bool, err error) {
-
 	aMap, err := mxj.NewMapXml([]byte(a), true)
 	if err != nil {
 		return
@@ -22,14 +21,7 @@ func IsCompatible(a, b string) (compatible bool, err error) {
 }
 
 func isStructurallyTheSame(a, b map[string]interface{}) (compatible bool, err error) {
-	if reflect.DeepEqual(a, b) {
-		compatible = true
-		return
-	}
 	for keyInA, v := range a {
-		if b[keyInA] == nil {
-			return
-		}
 		switch v.(type) {
 		case map[string]interface{}:
 			bMap, bIsMap := b[keyInA].(map[string]interface{})
