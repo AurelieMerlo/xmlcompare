@@ -1,3 +1,4 @@
+// Package xmlcompare provides functions for comparing bits of XML.
 package xmlcompare
 
 import (
@@ -7,7 +8,9 @@ import (
 	"github.com/clbanning/mxj"
 )
 
-// IsCompatible checks that two XML strings are structurally the same so that they are compatible. The first string should be your "correct" XML, if there are extra elements in B then they will still be seen as compatible.
+// IsCompatible compares two XML strings and returns true if the second has all the same element names and value types as the first.
+// The elements don't have to be in the same order.
+// The second XML string can have additional elements not present in the first.
 func IsCompatible(a, b string) (compatible bool, err error) {
 	aMap, err := mxj.NewMapXml([]byte(a), true)
 	if err != nil {
@@ -33,12 +36,9 @@ func isStructurallyTheSame(a, b map[string]interface{}) (compatible bool, err er
 				}
 				compatible = true
 			}
-			return
 		default:
 			err = fmt.Errorf("Unmatched datatype in XML found, got a %v", reflect.TypeOf(v))
-			return
 		}
 	}
-	compatible = true
 	return
 }
