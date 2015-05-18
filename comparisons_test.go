@@ -16,6 +16,14 @@ func TestIdenticalXMLIsCompatible(t *testing.T) {
 	assertCompatible(t, baseXML, baseXML)
 }
 
+func TestSimpleXML(t *testing.T) {
+	assertCompatible(t, `<foo>bar</foo>`, `<foo>baz</foo>`)
+}
+
+func TestSimpleXMLNumeric(t *testing.T) {
+	assertCompatible(t, `<foo>1</foo>`, `<foo>2</foo>`)
+}
+
 func TestXMLWithSameElementNamesAndValueTypesIsCompatible(t *testing.T) {
 	assertCompatible(t, baseXML, compatibleXML)
 }
